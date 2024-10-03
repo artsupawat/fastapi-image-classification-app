@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Prediction</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #444;
+            margin-top: 30px;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: inline-block; /* Center the form */
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        input[type="text"], input[type="file"] {
+            width: 80%; /* Width of the input fields */
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #007BFF; /* Button color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        .class-list {
+            display: flex; /* Use flexbox for horizontal layout */
+            justify-content: center; /* Center align items */
+            flex-wrap: wrap; /* Allow wrapping to the next line if needed */
+            margin-top: 10px; /* Add some space above the class list */
+        }
+
+        .class-item {
+            background-color: #fff; /* White background for each class item */
+            border-radius: 3px; /* Rounded corners */
+            padding: 10px 15px; /* Padding inside each class item */
+            margin: 3px; /* Space between items */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Light shadow */
+            font-size: 1.1em; /* Slightly larger text */
+            color: #333; /* Text color */
+        }
+
+        .image-preview {
+            margin-top: 15px;
+            max-width: 30%; /* Make sure the image fits the container */
+            height: auto; /* Maintain aspect ratio */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: none; /* Hide initially */
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to the Image Prediction Web App</h1>
+    
+    <!-- Display class dataset -->
+    <div class="class-list">
+        <h2>Available Classes:</h2>
+        {% for class_name in class_dataset %}
+            <div class="class-item">{{ class_name }}</div>
+        {% endfor %}
+    </div>
+
+    <h2>Predict from Image URL</h2>
+    <form action="/predict_url/" method="post" enctype="application/x-www-form-urlencoded">
+        <label for="image_url">Enter Image URL:</label>
+        <input type="text" id="image_url" name="image_url" value="https://example.com/image.jpg" required>
+        <input type="submit" value="Predict">
+    </form>
+
+    <h2>Predict from Uploaded Image</h2>
+    <form action="/predict_file/" method="post" enctype="multipart/form-data">
+        <label for="file">Upload Image File:</label>
+        <input type="file" id="file" name="file" accept="image/*" required onchange="previewImage(event)">
+        <img id="image-preview" class="image-preview" alt="Image Preview">
+        <input type="submit" value="Predict">
+    </form>
+
+    <div class="footer">
+        <p>Powered by NORRAWICH JITAREE</p>
+    </div>
+
+    <script>
+        function previewImage(event) {
+            const imagePreview = document.getElementById('image-preview');
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                imagePreview.src = reader.result; // Set the source of the image preview
+                imagePreview.style.display = 'block'; // Show the image preview
+            };
+
+            if (file) {
+                reader.readAsDataURL(file); // Read the uploaded file
+            }
+        }
+    </script>
+</body>
+</html>
